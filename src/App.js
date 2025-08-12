@@ -1301,21 +1301,6 @@ ${campusInfo.campus || 'Mikhail Education'}`;
               <p className="text-gray-600">Multi-Campus Payment Planning System</p>
             </div>
           </div>
-    </div>  {/* This closes the header section */}
-      
-      {/* ADD THIS LOGIN STATUS BAR HERE */}
-      <div className="bg-blue-100 text-blue-800 px-4 py-2 rounded-lg mb-4 flex justify-between items-center">
-        <div>
-          <a href="/.auth/login/aad" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-            Login with Office 365
-          </a>
-        </div>
-        <div className="text-sm">
-          Authentication Status: Not Required (Public Access)
-        </div>
-      </div>
-      
-      {/* Campus and Program Selection section continues below... */}
           <div className="flex gap-3">
             <button
               onClick={handleEmail}
