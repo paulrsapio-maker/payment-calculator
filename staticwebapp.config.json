@@ -1,14 +1,6 @@
 {
   "routes": [
     {
-      "route": "/login",
-      "redirect": "/.auth/login/aad"
-    },
-    {
-      "route": "/logout",
-      "redirect": "/.auth/logout"
-    },
-    {
       "route": "/*",
       "allowedRoles": ["authenticated"]
     }
@@ -16,14 +8,14 @@
   "responseOverrides": {
     "401": {
       "statusCode": 302,
-      "redirect": "/.auth/login/aad"
+      "redirect": "/.auth/login/aad?post_login_redirect_uri=/"
     }
   },
   "auth": {
     "identityProviders": {
       "azureActiveDirectory": {
         "registration": {
-          "openIdIssuer": "https://login.microsoftonline.com/YOUR_TENANT_ID",
+          "openIdIssuer": "https://login.microsoftonline.com/d9555724-cc3e-4843-90db-971da5f273f3/v2.0",
           "clientIdSettingName": "66a4ff67-5119-4999-b35c-db298210d416",
           "clientSecretSettingName": "~Hi8Q~IBAyR7ooWTDsug7IagYGckZWRVB3kB6bK~"
         }
