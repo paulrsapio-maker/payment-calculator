@@ -526,16 +526,16 @@ const PaymentPlanCalculator = () => {
   };
 
   // Helper function to get interest rate based on down payment percentage and term
-  const getInterestRate = (downPaymentPercentage, months) => {
-    const rates = {
-      0: { 12: 0, 24: 4.9, 36: 7.9, 48: 8.9 },
-      5: { 12: 0, 24: 3.9, 36: 6.9, 48: 7.9 },
-      10: { 12: 0, 24: 2.9, 36: 5.9, 48: 6.9 },
-      15: { 12: 0, 24: 1.9, 36: 4.9, 48: 5.9 },
-      20: { 12: 0, 24: 0, 36: 3.9, 48: 4.9 },
-      25: { 12: 0, 24: 0, 36: 2.9, 48: 3.9 },
-      999: { 12: 0, 24: 0, 36: 1.9, 48: 2.9 }
-    };
+const getInterestRate = (downPaymentPercentage, months) => {
+  const rates = {
+    0: { 12: 0, 24: 4.9, 36: 7.9, 48: 8.9 },
+    5: { 12: 0, 24: 3.9, 36: 6.9, 48: 7.9 },
+    10: { 12: 0, 24: 2.9, 36: 5.9, 48: 6.9 },
+    15: { 12: 0, 24: 1.9, 36: 4.9, 48: 5.9 },
+    20: { 12: 0, 24: 0.9, 36: 3.9, 48: 4.9 },
+    25: { 12: 0, 24: 0.9, 36: 2.9, 48: 3.9 },
+    999: { 12: 0, 24: 0.9, 36: 1.9, 48: 2.9 }
+  };
 
     let rateTier;
     if (downPaymentPercentage >= 25) {
