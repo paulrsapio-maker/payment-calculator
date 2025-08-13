@@ -33,441 +33,432 @@ const PaymentPlanCalculator = () => {
   
   const [paymentPlans, setPaymentPlans] = useState([]);
 
-  // JSON Database - Easy to update by editing this object
+  // Program database with all schools and programs
   const programDatabase = {
-    "lastUpdated": "2025-01-01",
-    "academicYear": "2025-2026",
-    "campuses": [
+    lastUpdated: "2025-01-01",
+    academicYear: "2025-2026",
+    campuses: [
       {
-        "id": "ati",
-        "name": "Advanced Training Institute",
-        "active": true
+        id: "lvc",
+        name: "Las Vegas College (LVC)",
+        active: true
       },
       {
-        "id": "lvc",
-        "name": "Las Vegas College",
-        "active": true
+        id: "ibt",
+        name: "Institute for Business and Technology (IBT)",
+        active: true
       },
       {
-        "id": "lamson",
-        "name": "Lamson Institute", 
-        "active": true
+        id: "lamson",
+        name: "Lamson Institute", 
+        active: true
       },
       {
-        "id": "hci",
-        "name": "Houston Career Institute",
-        "active": true
+        id: "hci",
+        name: "Houston Career Institute (HCI)",
+        active: true
       },
       {
-        "id": "nce",
-        "name": "National Career Education",
-        "active": true
+        id: "nce",
+        name: "National Career Education (NCE)",
+        active: true
       },
       {
-        "id": "ibt",
-        "name": "Institute for Business and Technology",
-        "active": true
+        id: "ati",
+        name: "Advanced Training Institute (ATI)",
+        active: true
       }
     ],
-    "programs": [
+    programs: [
+      // Las Vegas College Programs
       {
-        "id": "auto-tech-ati",
-        "campusId": "ati",
-        "name": "Automotive Technology",
-        "duration": "Modular",
-        "credits": null,
-        "hours": null,
-        "tuitionCost": 24530,
-        "active": true,
-        "effectiveDate": "2025-01-01"
+        id: "accounting-lvc",
+        campusId: "lvc",
+        name: "Accounting",
+        duration: "18 months",
+        weeks: 78,
+        months: 18,
+        credits: 96,
+        tuitionCost: 29800,
+        active: true,
+        effectiveDate: "2025-01-01"
       },
       {
-        "id": "hvac-cr-ati",
-        "campusId": "ati", 
-        "name": "HVAC/CR",
-        "duration": "Modular",
-        "credits": null,
-        "hours": null,
-        "tuitionCost": 17535,
-        "active": true,
-        "effectiveDate": "2025-01-01"
+        id: "cardiovascular-sonography-lvc",
+        campusId: "lvc",
+        name: "Cardiovascular Sonography",
+        duration: "24 months",
+        weeks: 104,
+        months: 24,
+        credits: 129,
+        tuitionCost: 57889,
+        active: true,
+        effectiveDate: "2025-01-01"
       },
       {
-        "id": "electrician-720-ati",
-        "campusId": "ati",
-        "name": "Electrician (720 Clock Hours)",
-        "duration": "Modular",
-        "credits": null,
-        "hours": 720,
-        "tuitionCost": 18457,
-        "active": true,
-        "effectiveDate": "2025-01-01"
+        id: "medical-assistant-lvc",
+        campusId: "lvc",
+        name: "Medical Assistant",
+        duration: "9 months",
+        weeks: 39,
+        months: 9,
+        hours: 800,
+        tuitionCost: 14085,
+        active: true,
+        effectiveDate: "2025-01-01"
       },
       {
-        "id": "electrician-840-ati",
-        "campusId": "ati",
-        "name": "Electrician (840 Clock Hours; pending final USDOE approval)",
-        "duration": "Modular",
-        "credits": null,
-        "hours": 840,
-        "tuitionCost": 20152,
-        "active": true,
-        "effectiveDate": "2025-01-01"
+        id: "rn-to-bsn-lvc",
+        campusId: "lvc",
+        name: "RN to BSN",
+        duration: "15 months",
+        weeks: 65,
+        months: 15,
+        credits: 90,
+        tuitionCost: 13450,
+        active: true,
+        effectiveDate: "2025-01-01"
       },
       {
-        "id": "personal-fitness-trainer-ati",
-        "campusId": "ati",
-        "name": "Personal Fitness Trainer",
-        "duration": "Modular",
-        "credits": null,
-        "hours": null,
-        "tuitionCost": 15170,
-        "active": true,
-        "effectiveDate": "2025-01-01"
+        id: "practical-nurse-lvc",
+        campusId: "lvc",
+        name: "Practical Nurse",
+        duration: "15 months",
+        weeks: 65,
+        months: 15,
+        credits: 55.5,
+        tuitionCost: 27775,
+        active: true,
+        effectiveDate: "2025-01-01"
       },
       {
-        "id": "accounting-lvc",
-        "campusId": "lvc",
-        "name": "Accounting",
-        "duration": "24 months",
-        "credits": 96,
-        "hours": null,
-        "tuitionCost": 29800,
-        "active": true,
-        "effectiveDate": "2025-01-01"
+        id: "nursing-lvc",
+        campusId: "lvc",
+        name: "Nursing",
+        duration: "24 months",
+        weeks: 104,
+        months: 24,
+        credits: 108,
+        tuitionCost: 60600,
+        active: true,
+        effectiveDate: "2025-01-01"
       },
       {
-        "id": "cardiovascular-sonography",
-        "campusId": "lvc",
-        "name": "Cardiovascular Sonography",
-        "duration": "24 months",
-        "credits": 129,
-        "hours": null,
-        "tuitionCost": 57889,
-        "active": true,
-        "effectiveDate": "2025-01-01"
+        id: "lab-assistant-ekg-phlebotomist-lvc",
+        campusId: "lvc",
+        name: "Laboratory Assistant / EKG Technician / Phlebotomist",
+        duration: "9 months",
+        weeks: 39,
+        months: 9,
+        hours: 800,
+        tuitionCost: 15600,
+        active: true,
+        effectiveDate: "2025-01-01"
+      },
+      // IBT Programs
+      {
+        id: "lab-assistant-ekg-phlebotomist-ibt",
+        campusId: "ibt",
+        name: "Lab Assistant, EKG Technician/Phlebotomist",
+        duration: "9 months",
+        weeks: 39,
+        months: 9,
+        tuitionCost: 16280,
+        active: true,
+        effectiveDate: "2025-01-01"
       },
       {
-        "id": "medical-assistant",
-        "campusId": "lvc",
-        "name": "Medical Assistant",
-        "duration": "36 weeks",
-        "credits": null,
-        "hours": 800,
-        "tuitionCost": 14085,
-        "active": true,
-        "effectiveDate": "2025-01-01"
+        id: "medical-assistant-ibt",
+        campusId: "ibt",
+        name: "Medical Assistant",
+        duration: "9 months",
+        weeks: 39,
+        months: 9,
+        tuitionCost: 15290,
+        active: true,
+        effectiveDate: "2025-01-01"
       },
       {
-        "id": "rn-to-bsn",
-        "campusId": "lvc",
-        "name": "RN to BSN",
-        "duration": "15 months",
-        "credits": 90,
-        "hours": null,
-        "tuitionCost": 13450,
-        "active": true,
-        "effectiveDate": "2025-01-01"
+        id: "automotive-technology-ibt",
+        campusId: "ibt",
+        name: "Automotive Technology",
+        duration: "14 months",
+        weeks: 61,
+        months: 14,
+        tuitionCost: 28090,
+        active: true,
+        effectiveDate: "2025-01-01"
       },
       {
-        "id": "practical-nurse",
-        "campusId": "lvc",
-        "name": "Practical Nurse",
-        "duration": "15 months",
-        "credits": 55.5,
-        "hours": null,
-        "tuitionCost": 27775,
-        "active": true,
-        "effectiveDate": "2025-01-01"
+        id: "commercial-refrigeration-hvac-ibt",
+        campusId: "ibt",
+        name: "Commercial Refrigeration, Heating and Air Conditioning",
+        duration: "10 months",
+        weeks: 43,
+        months: 10,
+        tuitionCost: 18700,
+        active: true,
+        effectiveDate: "2025-01-01"
       },
       {
-        "id": "nursing",
-        "campusId": "lvc",
-        "name": "Nursing",
-        "duration": "24 months",
-        "credits": 108,
-        "hours": null,
-        "tuitionCost": 60600,
-        "active": true,
-        "effectiveDate": "2025-01-01"
+        id: "electrician-720-ibt",
+        campusId: "ibt",
+        name: "Electrician (720 Clock Hours)",
+        duration: "9 months",
+        weeks: 39,
+        months: 9,
+        hours: 720,
+        tuitionCost: 19195,
+        active: true,
+        effectiveDate: "2025-01-01"
       },
       {
-        "id": "lab-assistant-ekg-phlebotomist",
-        "campusId": "lvc",
-        "name": "Laboratory Assistant/EKG Technician/Phlebotomist",
-        "duration": "36 weeks",
-        "credits": null,
-        "hours": 800,
-        "tuitionCost": 15600,
-        "active": true,
-        "effectiveDate": "2025-01-01"
+        id: "cardiovascular-sonography-ibt",
+        campusId: "ibt",
+        name: "Cardiovascular Sonography",
+        duration: "24 months",
+        weeks: 104,
+        months: 24,
+        tuitionCost: 61198,
+        active: true,
+        effectiveDate: "2025-01-01"
+      },
+      // Lamson Institute Programs
+      {
+        id: "dental-assisting-lamson",
+        campusId: "lamson",
+        name: "Dental Assisting",
+        duration: "11 months",
+        weeks: 48,
+        months: 11,
+        tuitionCost: 18500,
+        active: true,
+        effectiveDate: "2025-01-01"
       },
       {
-        "id": "lab-assistant-ekg-phlebotomist-ibt",
-        "campusId": "ibt",
-        "name": "Lab Assistant, EKG Technician/Phlebotomist",
-        "duration": "Modular/Clock Hour",
-        "credits": null,
-        "hours": null,
-        "tuitionCost": 16280,
-        "active": true,
-        "effectiveDate": "2025-01-01"
+        id: "lab-assistant-ekg-phlebotomist-lamson",
+        campusId: "lamson",
+        name: "Lab Assistant, EKG Technician/Phlebotomist",
+        duration: "9 months",
+        weeks: 39,
+        months: 9,
+        tuitionCost: 16540,
+        active: true,
+        effectiveDate: "2025-01-01"
       },
       {
-        "id": "medical-assistant-ibt",
-        "campusId": "ibt",
-        "name": "Medical Assistant",
-        "duration": "Modular/Clock Hour",
-        "credits": null,
-        "hours": null,
-        "tuitionCost": 15290,
-        "active": true,
-        "effectiveDate": "2025-01-01"
+        id: "medical-assistant-lamson",
+        campusId: "lamson",
+        name: "Medical Assistant",
+        duration: "9 months",
+        weeks: 39,
+        months: 9,
+        tuitionCost: 15790,
+        active: true,
+        effectiveDate: "2025-01-01"
       },
       {
-        "id": "automotive-technology-ibt",
-        "campusId": "ibt",
-        "name": "Automotive Technology",
-        "duration": "Modular/Clock Hour",
-        "credits": null,
-        "hours": null,
-        "tuitionCost": 28090,
-        "active": true,
-        "effectiveDate": "2025-01-01"
+        id: "electrical-technician-lamson",
+        campusId: "lamson",
+        name: "Electrical Technician",
+        duration: "9 months",
+        weeks: 39,
+        months: 9,
+        tuitionCost: 17200,
+        active: true,
+        effectiveDate: "2025-01-01"
       },
       {
-        "id": "commercial-refrigeration-hvac-ibt",
-        "campusId": "ibt",
-        "name": "Commercial Refrigeration, Heating and Air Conditioning",
-        "duration": "Modular/Clock Hour",
-        "credits": null,
-        "hours": null,
-        "tuitionCost": 18700,
-        "active": true,
-        "effectiveDate": "2025-01-01"
+        id: "commercial-refrigeration-hvac-lamson",
+        campusId: "lamson",
+        name: "Commercial Refrigeration, Heating and Air Conditioning",
+        duration: "10 months",
+        weeks: 43,
+        months: 10,
+        tuitionCost: 18060,
+        active: true,
+        effectiveDate: "2025-01-01"
       },
       {
-        "id": "electrician-720-ibt",
-        "campusId": "ibt",
-        "name": "Electrician (720 Clock Hours)",
-        "duration": "Modular/Clock Hour",
-        "credits": null,
-        "hours": 720,
-        "tuitionCost": 19195,
-        "active": true,
-        "effectiveDate": "2025-01-01"
+        id: "personal-fitness-trainer-lamson",
+        campusId: "lamson",
+        name: "Personal Fitness Trainer",
+        duration: "10 months",
+        weeks: 43,
+        months: 10,
+        tuitionCost: 15300,
+        active: true,
+        effectiveDate: "2025-01-01"
       },
       {
-        "id": "cardiovascular-sonography-ibt",
-        "campusId": "ibt",
-        "name": "Cardiovascular Sonography",
-        "duration": "Term-Based",
-        "credits": 129,
-        "hours": null,
-        "creditType": "quarter credits",
-        "tuitionCost": 61198,
-        "active": true,
-        "effectiveDate": "2025-01-01"
+        id: "vocational-nursing-lamson",
+        campusId: "lamson",
+        name: "Vocational Nursing",
+        duration: "12 months",
+        weeks: 52,
+        months: 12,
+        tuitionCost: 28095,
+        active: true,
+        effectiveDate: "2025-01-01"
+      },
+      // HCI Programs
+      {
+        id: "dental-assisting-hci",
+        campusId: "hci",
+        name: "Dental Assisting",
+        duration: "11 months",
+        weeks: 48,
+        months: 11,
+        tuitionCost: 19010,
+        active: true,
+        effectiveDate: "2025-01-01"
       },
       {
-        "id": "dental-assisting-lamson",
-        "campusId": "lamson",
-        "name": "Dental Assisting",
-        "duration": "Modular",
-        "credits": null,
-        "hours": null,
-        "tuitionCost": 18500,
-        "active": true,
-        "effectiveDate": "2025-01-01"
+        id: "lab-assistant-ekg-phlebotomist-hci",
+        campusId: "hci",
+        name: "Laboratory Assistant/EKG Technician/Phlebotomist",
+        duration: "9 months",
+        weeks: 39,
+        months: 9,
+        tuitionCost: 15600,
+        active: true,
+        effectiveDate: "2025-01-01"
       },
       {
-        "id": "lab-assistant-ekg-phlebotomist-lamson",
-        "campusId": "lamson",
-        "name": "Lab Assistant, EKG Technician/Phlebotomist",
-        "duration": "Modular",
-        "credits": null,
-        "hours": null,
-        "tuitionCost": 16540,
-        "active": true,
-        "effectiveDate": "2025-01-01"
+        id: "medical-assistant-hci",
+        campusId: "hci",
+        name: "Medical Assistant",
+        duration: "9 months",
+        weeks: 39,
+        months: 9,
+        tuitionCost: 14085,
+        active: true,
+        effectiveDate: "2025-01-01"
       },
       {
-        "id": "medical-assistant-lamson",
-        "campusId": "lamson",
-        "name": "Medical Assistant",
-        "duration": "Modular",
-        "credits": null,
-        "hours": null,
-        "tuitionCost": 15790,
-        "active": true,
-        "effectiveDate": "2025-01-01"
+        id: "commercial-refrigeration-hvac-hci",
+        campusId: "hci",
+        name: "Commercial Refrigeration, Heating and Air Conditioning",
+        duration: "10 months",
+        weeks: 43,
+        months: 10,
+        tuitionCost: 16585,
+        active: true,
+        effectiveDate: "2025-01-01"
       },
       {
-        "id": "electrical-technician-lamson",
-        "campusId": "lamson",
-        "name": "Electrical Technician",
-        "duration": "Modular",
-        "credits": null,
-        "hours": null,
-        "tuitionCost": 17200,
-        "active": true,
-        "effectiveDate": "2025-01-01"
+        id: "electrical-technician-hci",
+        campusId: "hci",
+        name: "Electrical Technician",
+        duration: "10 months",
+        weeks: 43,
+        months: 10,
+        tuitionCost: 17290,
+        active: true,
+        effectiveDate: "2025-01-01"
       },
       {
-        "id": "commercial-refrigeration-hvac-lamson",
-        "campusId": "lamson",
-        "name": "Commercial Refrigeration, Heating and Air Conditioning",
-        "duration": "Modular",
-        "credits": null,
-        "hours": null,
-        "tuitionCost": 18060,
-        "active": true,
-        "effectiveDate": "2025-01-01"
+        id: "surgical-technology-hci",
+        campusId: "hci",
+        name: "Surgical Technology",
+        duration: "24 months",
+        weeks: 104,
+        months: 24,
+        tuitionCost: 34424,
+        active: true,
+        effectiveDate: "2025-01-01"
+      },
+      // NCE Programs
+      {
+        id: "commercial-refrigeration-hvac-nce",
+        campusId: "nce",
+        name: "Commercial Refrigeration, Heating and Air Conditioning",
+        duration: "10 months",
+        weeks: 43,
+        months: 10,
+        tuitionCost: 16585,
+        active: true,
+        effectiveDate: "2025-01-01"
       },
       {
-        "id": "personal-fitness-trainer-lamson",
-        "campusId": "lamson",
-        "name": "Personal Fitness Trainer",
-        "duration": "Modular",
-        "credits": null,
-        "hours": null,
-        "tuitionCost": 15300,
-        "active": true,
-        "effectiveDate": "2025-01-01"
+        id: "electrician-720-nce",
+        campusId: "nce",
+        name: "Electrician (720 Clock Hours)",
+        duration: "9 months",
+        weeks: 39,
+        months: 9,
+        hours: 720,
+        tuitionCost: 16584,
+        active: true,
+        effectiveDate: "2025-01-01"
       },
       {
-        "id": "vocational-nursing-lamson",
-        "campusId": "lamson",
-        "name": "Vocational Nursing",
-        "duration": "Term-Based",
-        "credits": 72.5,
-        "hours": null,
-        "creditType": "quarter credits",
-        "tuitionCost": 28095,
-        "active": true,
-        "effectiveDate": "2025-01-01"
+        id: "lab-assistant-ekg-phlebotomist-nce",
+        campusId: "nce",
+        name: "Lab Assistant, EKG Technician/Phlebotomist",
+        duration: "9 months",
+        weeks: 39,
+        months: 9,
+        tuitionCost: 14850,
+        active: true,
+        effectiveDate: "2025-01-01"
       },
       {
-        "id": "dental-assisting-hci",
-        "campusId": "hci",
-        "name": "Dental Assisting",
-        "duration": "47 weeks",
-        "credits": null,
-        "hours": 940,
-        "tuitionCost": 19010,
-        "active": true,
-        "effectiveDate": "2025-01-01"
+        id: "medical-assistant-nce",
+        campusId: "nce",
+        name: "Medical Assistant",
+        duration: "9 months",
+        weeks: 39,
+        months: 9,
+        tuitionCost: 14065,
+        active: true,
+        effectiveDate: "2025-01-01"
+      },
+      // ATI Programs
+      {
+        id: "automotive-technology-ati",
+        campusId: "ati",
+        name: "Automotive Technology",
+        duration: "14 months",
+        weeks: 61,
+        months: 14,
+        tuitionCost: 24530,
+        active: true,
+        effectiveDate: "2025-01-01"
       },
       {
-        "id": "lab-assistant-ekg-phlebotomist-hci",
-        "campusId": "hci",
-        "name": "Laboratory Assistant/EKG Technician/Phlebotomist",
-        "duration": "36 weeks",
-        "credits": null,
-        "hours": 800,
-        "tuitionCost": 15600,
-        "active": true,
-        "effectiveDate": "2025-01-01"
+        id: "hvac-cr-ati",
+        campusId: "ati",
+        name: "HVAC/CR",
+        duration: "10 months",
+        weeks: 43,
+        months: 10,
+        tuitionCost: 17535,
+        active: true,
+        effectiveDate: "2025-01-01"
       },
       {
-        "id": "medical-assistant-hci",
-        "campusId": "hci",
-        "name": "Medical Assistant",
-        "duration": "36 weeks",
-        "credits": null,
-        "hours": 800,
-        "tuitionCost": 14085,
-        "active": true,
-        "effectiveDate": "2025-01-01"
+        id: "electrician-720-ati",
+        campusId: "ati",
+        name: "Electrician (720 Clock Hours)",
+        duration: "9 months",
+        weeks: 39,
+        months: 9,
+        hours: 720,
+        tuitionCost: 18457,
+        active: true,
+        effectiveDate: "2025-01-01"
       },
       {
-        "id": "commercial-refrigeration-hvac-hci",
-        "campusId": "hci",
-        "name": "Commercial Refrigeration, Heating and Air Conditioning",
-        "duration": "42 weeks",
-        "credits": null,
-        "hours": 840,
-        "tuitionCost": 16585,
-        "active": true,
-        "effectiveDate": "2025-01-01"
-      },
-      {
-        "id": "electrical-technician-hci",
-        "campusId": "hci",
-        "name": "Electrical Technician",
-        "duration": "42 weeks",
-        "credits": null,
-        "hours": 840,
-        "tuitionCost": 17290,
-        "active": true,
-        "effectiveDate": "2025-01-01"
-      },
-      {
-        "id": "surgical-technology-hci",
-        "campusId": "hci",
-        "name": "Surgical Technology",
-        "duration": "24 months",
-        "credits": 98,
-        "hours": null,
-        "creditType": "quarter credits",
-        "tuitionCost": 34424,
-        "active": true,
-        "effectiveDate": "2025-01-01"
-      },
-      {
-        "id": "commercial-refrigeration-hvac-nce",
-        "campusId": "nce",
-        "name": "Commercial Refrigeration, Heating and Air Conditioning",
-        "duration": "Modular",
-        "credits": null,
-        "hours": null,
-        "tuitionCost": 16585,
-        "active": true,
-        "effectiveDate": "2025-01-01"
-      },
-      {
-        "id": "electrician-720-nce",
-        "campusId": "nce",
-        "name": "Electrician (720 Clock Hours)",
-        "duration": "Modular",
-        "credits": null,
-        "hours": 720,
-        "tuitionCost": 16584,
-        "active": true,
-        "effectiveDate": "2025-01-01"
-      },
-      {
-        "id": "electrician-840-nce",
-        "campusId": "nce",
-        "name": "Electrician (840 Clock Hours)",
-        "duration": "Modular",
-        "credits": null,
-        "hours": 840,
-        "tuitionCost": 17290,
-        "active": true,
-        "effectiveDate": "2025-01-01"
-      },
-      {
-        "id": "lab-assistant-ekg-phlebotomist-nce",
-        "campusId": "nce",
-        "name": "Lab Assistant, EKG Technician/Phlebotomist",
-        "duration": "Modular",
-        "credits": null,
-        "hours": null,
-        "tuitionCost": 14850,
-        "active": true,
-        "effectiveDate": "2025-01-01"
-      },
-      {
-        "id": "medical-assistant-nce",
-        "campusId": "nce",
-        "name": "Medical Assistant",
-        "duration": "Modular",
-        "credits": null,
-        "hours": null,
-        "tuitionCost": 14065,
-        "active": true,
-        "effectiveDate": "2025-01-01"
+        id: "personal-fitness-trainer-ati",
+        campusId: "ati",
+        name: "Personal Fitness Trainer",
+        duration: "10 months",
+        weeks: 43,
+        months: 10,
+        tuitionCost: 15170,
+        active: true,
+        effectiveDate: "2025-01-01"
       }
     ]
   };
@@ -525,52 +516,45 @@ const PaymentPlanCalculator = () => {
     return Math.max(0, getActiveBalance() - downPayment);
   };
 
-  // Helper function to get interest rate based on down payment percentage and term
-const getInterestRate = (downPaymentPercentage, months) => {
-  const rates = {
-    0: { 12: 0, 24: 4.9, 36: 7.9, 48: 8.9 },
-    5: { 12: 0, 24: 3.9, 36: 6.9, 48: 7.9 },
-    10: { 12: 0, 24: 2.9, 36: 5.9, 48: 6.9 },
-    15: { 12: 0, 24: 1.9, 36: 4.9, 48: 5.9 },
-    20: { 12: 0, 24: 0.9, 36: 3.9, 48: 4.9 },
-    25: { 12: 0, 24: 0.9, 36: 2.9, 48: 3.9 },
-    999: { 12: 0, 24: 0.9, 36: 1.9, 48: 2.9 }
-  };
-
-    let rateTier;
-    if (downPaymentPercentage >= 25) {
-      rateTier = downPaymentPercentage > 25 ? 999 : 25;
-    } else if (downPaymentPercentage >= 20) {
-      rateTier = 20;
-    } else if (downPaymentPercentage >= 15) {
-      rateTier = 15;
-    } else if (downPaymentPercentage >= 10) {
-      rateTier = 10;
-    } else if (downPaymentPercentage >= 5) {
-      rateTier = 5;
-    } else {
-      rateTier = 0;
+  // NEW SIMPLE INTEREST RATE FUNCTION
+  const calculateInterestRate = (programLengthMonths, paymentTermMonths, downPaymentPercent) => {
+    // If payment term equals program length, always 0%
+    if (paymentTermMonths === programLengthMonths) {
+      return 0;
     }
-
-    return rates[rateTier][months];
+    
+    // Calculate how many months beyond program
+    const monthsBeyond = paymentTermMonths - programLengthMonths;
+    
+    // Determine base rate
+    let baseRate;
+    if (monthsBeyond <= 12) {
+      baseRate = 6.9;
+    } else if (monthsBeyond <= 24) {
+      baseRate = 7.9;
+    } else if (monthsBeyond <= 36) {
+      baseRate = 8.9;
+    } else {
+      baseRate = 8.9;
+    }
+    
+    // Apply discount (half of down payment percentage)
+    const discount = (downPaymentPercent / 2) / 100;
+    const finalRate = baseRate * (1 - discount);
+    
+    return Math.round(finalRate * 10) / 10;
   };
 
   // Helper function to get the rate tier description
   const getRateTierDescription = () => {
     const percentage = getDownPaymentPercentage();
-    if (percentage >= 25) {
-      return percentage > 25 ? '>25% Down Payment Tier' : '25% Down Payment Tier';
-    } else if (percentage >= 20) {
-      return '20% Down Payment Tier';
-    } else if (percentage >= 15) {
-      return '15% Down Payment Tier';
-    } else if (percentage >= 10) {
-      return '10% Down Payment Tier';
-    } else if (percentage >= 5) {
-      return '5% Down Payment Tier';
-    } else {
-      return '0% Down Payment Tier';
+    const program = getProgramDetails(campusInfo.program);
+    
+    if (program && program.months) {
+      return `${program.months}-Month Program (0% APR available)`;
     }
+    
+    return `${percentage.toFixed(1)}% Down Payment`;
   };
 
   const handleCampusInfoChange = (field, value) => {
@@ -648,7 +632,7 @@ ${downPayment > 0 ? `Down Payment: ${formatCurrency(downPayment)}
 
 ${financeAmount > 0 && paymentPlans.length > 0 ? `PAYMENT OPTIONS:
 ${paymentPlans.map((plan, index) => `
-${index + 1}. ${plan.description}: ${formatCurrency(plan.monthlyPayment)}/mo (${plan.interestRate}% APR)`).join('')}
+${index + 1}. ${plan.description}: ${formatCurrency(plan.monthlyPayment)}/mo (${plan.interestRate}% APR)${plan.isZeroInterest ? ' - 0% INTEREST!' : ''}`).join('')}
 
 Full details in attached document.` : financeAmount === 0 && activeBalance > 0 ? 'Fully paid with down payment!' : 'See attached for details.'}
 
@@ -761,79 +745,7 @@ ${campusInfo.campus || 'Mikhail Education'}`;
             font-weight: bold;
           ">📋 Copy Email Content</button>
         </div>
-        
-        <!-- Option 3: Web mail -->
-        <div style="border: 2px solid #8b5cf6; border-radius: 8px; padding: 15px; background: #f3f0ff;">
-          <h4 style="color: #7c3aed; margin: 0 0 10px 0;">Option 3: Open Web Mail Manually</h4>
-          <p style="font-size: 12px; color: #666; margin-bottom: 10px;">Open Outlook.com or Office 365 in a new tab and paste the content</p>
-          <div style="display: flex; gap: 10px;">
-            <a href="https://outlook.office.com/mail/deeplink/compose" target="_blank" style="
-              background: #7c3aed;
-              color: white;
-              padding: 10px 15px;
-              border-radius: 6px;
-              text-decoration: none;
-              font-size: 13px;
-              font-weight: bold;
-            ">🌐 Outlook Web</a>
-            <a href="https://outlook.live.com/mail/0/deeplink/compose" target="_blank" style="
-              background: #7c3aed;
-              color: white;
-              padding: 10px 15px;
-              border-radius: 6px;
-              text-decoration: none;
-              font-size: 13px;
-              font-weight: bold;
-            ">🌐 Outlook.com</a>
-          </div>
-        </div>
       </div>
-      
-      <details style="margin-bottom: 20px; border: 1px solid #e5e7eb; border-radius: 8px; padding: 10px;">
-        <summary style="cursor: pointer; color: #6b7280; font-size: 14px; font-weight: bold;">
-          View Full Email Content
-        </summary>
-        
-        <div style="margin-top: 15px;">
-          <div style="background: #f9fafb; padding: 10px; border-radius: 6px; margin-bottom: 10px;">
-            <label style="font-weight: bold; color: #374151; display: block; margin-bottom: 5px; font-size: 11px;">To:</label>
-            <input type="text" value="${studentInfo.email || ''}" style="
-              width: 100%;
-              padding: 6px;
-              border: 1px solid #d1d5db;
-              border-radius: 4px;
-              font-family: monospace;
-              font-size: 12px;
-            " onclick="this.select()" readonly />
-          </div>
-          
-          <div style="background: #f9fafb; padding: 10px; border-radius: 6px; margin-bottom: 10px;">
-            <label style="font-weight: bold; color: #374151; display: block; margin-bottom: 5px; font-size: 11px;">Subject:</label>
-            <input type="text" value="${subject}" style="
-              width: 100%;
-              padding: 6px;
-              border: 1px solid #d1d5db;
-              border-radius: 4px;
-              font-family: monospace;
-              font-size: 12px;
-            " onclick="this.select()" readonly />
-          </div>
-          
-          <div style="background: #f9fafb; padding: 10px; border-radius: 6px;">
-            <label style="font-weight: bold; color: #374151; display: block; margin-bottom: 5px; font-size: 11px;">Body:</label>
-            <textarea style="
-              width: 100%;
-              padding: 6px;
-              border: 1px solid #d1d5db;
-              border-radius: 4px;
-              font-family: monospace;
-              font-size: 11px;
-              height: 200px;
-              resize: vertical;
-            " onclick="this.select()" readonly>${body}</textarea>
-          </div>
-        </div>
-      </details>
       
       <div style="text-align: center;">
         <button onclick="this.closest('[style*=\\"position: fixed\\"]').remove()" style="
@@ -868,11 +780,12 @@ ${campusInfo.campus || 'Mikhail Education'}`;
       month: 'long', 
       day: 'numeric' 
     });
+    const program = getProgramDetails(campusInfo.program);
     
     const htmlContent = `<!DOCTYPE html>
       <html>
         <head>
-          <title>ATI Payment Plan - ${studentInfo.name || 'Student'}</title>
+          <title>Payment Plan - ${studentInfo.name || 'Student'}</title>
           <meta charset="utf-8">
           <style>
             * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -933,7 +846,7 @@ ${campusInfo.campus || 'Mikhail Education'}`;
             }
             .payment-plans {
               display: grid;
-              grid-template-columns: repeat(2, 1fr);
+              grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
               gap: 15px;
               margin-top: 15px;
             }
@@ -943,6 +856,10 @@ ${campusInfo.campus || 'Mikhail Education'}`;
               border-radius: 8px;
               padding: 15px;
               text-align: center;
+            }
+            .payment-plan.zero-interest {
+              border-color: #10b981;
+              background: #f0fdf4;
             }
             .plan-header {
               display: flex;
@@ -961,6 +878,10 @@ ${campusInfo.campus || 'Mikhail Education'}`;
               font-size: 11px;
               padding: 3px 8px;
               border-radius: 4px;
+            }
+            .plan-rate.zero {
+              background: #10b981;
+              color: white;
             }
             .plan-payment {
               font-size: 22px;
@@ -1030,7 +951,7 @@ ${campusInfo.campus || 'Mikhail Education'}`;
           </div>
           
           <div class="section">
-            <div class="section-title">📍 Campus & Program Information</div>
+            <div class="section-title">📚 Campus & Program Information</div>
             <div class="cost-summary">
               <div class="cost-item">
                 <span><strong>Campus:</strong></span>
@@ -1040,10 +961,10 @@ ${campusInfo.campus || 'Mikhail Education'}`;
                 <span><strong>Program:</strong></span>
                 <span>${campusInfo.program || 'Not specified'}</span>
               </div>
-              ${campusInfo.program && getProgramDetails(campusInfo.program) ? `
+              ${program ? `
               <div class="cost-item">
                 <span><strong>Duration:</strong></span>
-                <span>${getProgramDetails(campusInfo.program).duration}</span>
+                <span>${program.duration} (${program.weeks} weeks)</span>
               </div>
               ` : ''}
             </div>
@@ -1055,6 +976,10 @@ ${campusInfo.campus || 'Mikhail Education'}`;
               <div class="cost-item">
                 <span><strong>Student Name:</strong></span>
                 <span>${studentInfo.name || 'Not specified'}</span>
+              </div>
+              <div class="cost-item">
+                <span><strong>Email:</strong></span>
+                <span>${studentInfo.email || 'Not specified'}</span>
               </div>
               <div class="cost-item">
                 <span><strong>Admissions Rep:</strong></span>
@@ -1116,11 +1041,12 @@ ${campusInfo.campus || 'Mikhail Education'}`;
             <div class="section-title">📅 Payment Plan Options - ${getRateTierDescription()}</div>
             <div class="payment-plans">
               ${paymentPlans.map(plan => `
-                <div class="payment-plan">
+                <div class="payment-plan ${plan.isZeroInterest ? 'zero-interest' : ''}">
                   <div class="plan-header">
                     <span class="plan-title">${plan.description}</span>
-                    <span class="plan-rate">${plan.interestRate}% APR</span>
+                    <span class="plan-rate ${plan.isZeroInterest ? 'zero' : ''}">${plan.interestRate}% APR</span>
                   </div>
+                  ${plan.isZeroInterest ? '<div style="color: #10b981; font-weight: bold; font-size: 12px;">✨ 0% INTEREST!</div>' : ''}
                   <div class="plan-payment">${formatCurrency(plan.monthlyPayment)}</div>
                   <div class="plan-details"><strong>Monthly Payment</strong></div>
                   <div class="plan-details">${plan.months} payments total</div>
@@ -1129,7 +1055,6 @@ ${campusInfo.campus || 'Mikhail Education'}`;
                   <div class="plan-details" style="font-weight: bold; border-top: 1px solid #e5e7eb; padding-top: 5px; margin-top: 5px;">
                     Total: ${formatCurrency(plan.totalAmount)}
                   </div>
-                  ${downPayment > 0 ? `<div class="plan-details" style="color: #7c3aed; font-weight: bold;">+ ${formatCurrency(downPayment)} down payment</div>` : ''}
                 </div>
               `).join('')}
             </div>
@@ -1163,12 +1088,19 @@ ${campusInfo.campus || 'Mikhail Education'}`;
               </div>
               
               <div class="signature-box">
-                <div class="signature-label">School Representative</div>
+                <div class="signature-label">Admissions Representative</div>
                 <div class="signature-line"></div>
                 <div class="signature-name">${studentInfo.admissionsRep || 'Representative Name'}</div>
                 <div class="date-line"></div>
                 <div class="date-label">Date</div>
               </div>
+            </div>
+            
+            <div style="margin-top: 40px; padding-top: 30px; border-top: 1px solid #e5e7eb;">
+              <p style="font-size: 11px; color: #666; text-align: center; line-height: 1.6;">
+                This payment plan agreement is subject to the terms and conditions of the enrollment agreement.<br>
+                For questions or concerns, please contact the Financial Aid Office at ${campusInfo.campus || 'your campus'}.
+              </p>
             </div>
           </div>
         </body>
@@ -1179,7 +1111,7 @@ ${campusInfo.campus || 'Mikhail Education'}`;
     
     // Create a download link
     const link = document.createElement('a');
-    const fileName = `ATI_Payment_Plan_${studentInfo.name || 'Student'}_${new Date().toISOString().split('T')[0]}.html`;
+    const fileName = `Payment_Plan_${studentInfo.name || 'Student'}_${new Date().toISOString().split('T')[0]}.html`;
     link.href = URL.createObjectURL(blob);
     link.download = fileName;
     
@@ -1234,53 +1166,69 @@ ${campusInfo.campus || 'Mikhail Education'}`;
     }, 5000);
   };
 
-  // Calculate payment plans when balance changes
+  // NEW PAYMENT PLAN CALCULATION
   useEffect(() => {
-    const calculatePaymentPlans = () => {
-      const plans = [];
-      const calculatedBalance = Math.max(0, tuition + costs.laptopOptOut + costs.bookOptOut - totalFinancialAid);
-      const activeBalance = balance > 0 ? balance : calculatedBalance;
-      const financeAmount = Math.max(0, activeBalance - downPayment);
+    const program = getProgramDetails(campusInfo.program);
+    if (!program) {
+      setPaymentPlans([]);
+      return;
+    }
+    
+    const financeAmount = getFinanceAmount();
+    if (financeAmount <= 0) {
+      setPaymentPlans([]);
+      return;
+    }
+    
+    const programMonths = program.months;
+    const downPaymentPercent = getDownPaymentPercentage();
+    
+    // Create exactly 5 payment terms
+    const terms = [
+      programMonths,           // Program length
+      programMonths + 12,      // +12 months
+      programMonths + 24,      // +24 months
+      programMonths + 36,      // +36 months
+      programMonths + 48       // +48 months
+    ];
+    
+    const plans = terms.map((termMonths, index) => {
+      const rate = calculateInterestRate(programMonths, termMonths, downPaymentPercent);
+      const monthlyRate = rate / 100 / 12;
       
-      const planOptions = [
-        { months: 12, description: '12 Month Plan' },
-        { months: 24, description: '24 Month Plan' },
-        { months: 36, description: '36 Month Plan' },
-        { months: 48, description: '48 Month Plan' }
-      ];
-
-      const downPaymentPercentage = getDownPaymentPercentage();
-
-      planOptions.forEach(option => {
-        if (financeAmount > 0) {
-          const interestRate = getInterestRate(downPaymentPercentage, option.months);
-          const monthlyInterestRate = interestRate / 100 / 12;
-          
-          let monthlyPayment, totalAmount;
-          
-          if (interestRate === 0) {
-            monthlyPayment = financeAmount / option.months;
-            totalAmount = financeAmount;
-          } else {
-            monthlyPayment = financeAmount * (monthlyInterestRate * Math.pow(1 + monthlyInterestRate, option.months)) / (Math.pow(1 + monthlyInterestRate, option.months) - 1);
-            totalAmount = monthlyPayment * option.months;
-          }
-          
-          plans.push({
-            ...option,
-            interestRate: interestRate,
-            monthlyPayment: monthlyPayment,
-            totalAmount: totalAmount,
-            totalInterest: totalAmount - financeAmount
-          });
-        }
-      });
-
-      setPaymentPlans(plans);
-    };
-
-    calculatePaymentPlans();
-  }, [balance, tuition, totalFinancialAid, costs.laptopOptOut, costs.bookOptOut, downPayment]);
+      let monthlyPayment, totalAmount, totalInterest;
+      
+      if (rate === 0) {
+        monthlyPayment = financeAmount / termMonths;
+        totalAmount = financeAmount;
+        totalInterest = 0;
+      } else {
+        monthlyPayment = financeAmount * (monthlyRate * Math.pow(1 + monthlyRate, termMonths)) / 
+                        (Math.pow(1 + monthlyRate, termMonths) - 1);
+        totalAmount = monthlyPayment * termMonths;
+        totalInterest = totalAmount - financeAmount;
+      }
+      
+      let description = `${termMonths} Month Plan`;
+      if (index === 0) {
+        description += ' (Program Length)';
+      } else {
+        description += ` (+${termMonths - programMonths} months)`;
+      }
+      
+      return {
+        months: termMonths,
+        description: description,
+        interestRate: rate,
+        monthlyPayment: monthlyPayment,
+        totalAmount: totalAmount,
+        totalInterest: totalInterest,
+        isZeroInterest: rate === 0
+      };
+    });
+    
+    setPaymentPlans(plans);
+  }, [campusInfo.program, balance, tuition, totalFinancialAid, costs, downPayment]);
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('en-US', {
@@ -1306,9 +1254,6 @@ ${campusInfo.campus || 'Mikhail Education'}`;
               onClick={handleEmail}
               className="flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
             >
-              <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-              </svg>
               Email
             </button>
             <button
@@ -1361,28 +1306,26 @@ ${campusInfo.campus || 'Mikhail Education'}`;
               <option value="">-- Select a Program --</option>
               {getProgramsByCampus(campusInfo.campus).map((program) => (
                 <option key={program.id} value={program.name}>
-                  {program.name} ({program.duration}{program.hours ? `, ${program.hours} hours` : program.credits ? `, ${program.credits} ${program.creditType || 'credits'}` : ''})
+                  {program.name} ({program.duration})
                 </option>
               ))}
             </select>
             {!campusInfo.campus && (
               <p className="text-xs text-gray-500 mt-1">Please select a campus first</p>
             )}
-            {campusInfo.campus && getProgramsByCampus(campusInfo.campus).length === 0 && (
-              <p className="text-xs text-gray-500 mt-1">No programs available for this campus yet</p>
-            )}
-            {campusInfo.campus && getProgramsByCampus(campusInfo.campus).length > 0 && (
-              <p className="text-xs text-indigo-600 mt-1">
-                📚 Database last updated: {programDatabase.lastUpdated} (Academic Year: {programDatabase.academicYear})
-              </p>
-            )}
           </div>
         </div>
         
-        {campusInfo.campus && campusInfo.program && (
+        {campusInfo.campus && campusInfo.program && getProgramDetails(campusInfo.program) && (
           <div className="mt-4 p-3 bg-indigo-50 rounded-lg">
             <div className="text-sm text-indigo-800">
               <strong>Selected:</strong> {campusInfo.program} at {campusInfo.campus}
+              <br />
+              <strong>Duration:</strong> {getProgramDetails(campusInfo.program).duration} ({getProgramDetails(campusInfo.program).weeks} weeks)
+              <br />
+              <span className="text-green-600 font-semibold">
+                ✨ 0% interest available for {getProgramDetails(campusInfo.program).months}-month payment plan!
+              </span>
             </div>
           </div>
         )}
@@ -1552,7 +1495,7 @@ ${campusInfo.campus || 'Mikhail Education'}`;
                 </div>
                 {campusInfo.program && getProgramCost(campusInfo.program) && (
                   <p className="text-xs text-green-600 mt-1">
-                    ✓ Auto-filled based on selected program: {campusInfo.program} ({getProgramDetails(campusInfo.program)?.duration}{getProgramDetails(campusInfo.program)?.hours ? `, ${getProgramDetails(campusInfo.program)?.hours} hours` : getProgramDetails(campusInfo.program)?.credits ? `, ${getProgramDetails(campusInfo.program)?.credits} ${getProgramDetails(campusInfo.program)?.creditType || 'credits'}` : ''})
+                    ✔ Auto-filled based on selected program
                   </p>
                 )}
               </div>
@@ -1584,11 +1527,6 @@ ${campusInfo.campus || 'Mikhail Education'}`;
                       <span>Remaining Balance:</span>
                       <span className="text-blue-600">{formatCurrency(calculatedBalance)}</span>
                     </div>
-                    {calculatedBalance > 0 && (
-                      <p className="text-xs text-blue-600 mt-1">
-                        ✓ This amount has been automatically copied to "Balance to Finance" below
-                      </p>
-                    )}
                   </div>
                 </div>
               </div>
@@ -1609,12 +1547,6 @@ ${campusInfo.campus || 'Mikhail Education'}`;
                     step="0.01"
                   />
                 </div>
-                <p className="text-xs text-gray-500 mt-1">
-                  {balance === calculatedBalance ? 
-                    "Auto-filled from remaining balance above. You can modify this amount if needed." :
-                    "Modified balance amount. Original calculated balance was " + formatCurrency(calculatedBalance)
-                  }
-                </p>
               </div>
             </div>
           </div>
@@ -1645,7 +1577,6 @@ ${campusInfo.campus || 'Mikhail Education'}`;
                     max={getActiveBalance()}
                   />
                 </div>
-                <p className="text-xs text-gray-500 mt-1">Enter down payment amount (optional)</p>
               </div>
               
               <div className="bg-gray-50 p-4 rounded-lg">
@@ -1676,7 +1607,7 @@ ${campusInfo.campus || 'Mikhail Education'}`;
                     Current Rate Tier: {getRateTierDescription()}
                   </div>
                   <div className="text-xs text-blue-600">
-                    {getDownPaymentPercentage().toFixed(1)}% down payment qualifies for reduced interest rates
+                    {getDownPaymentPercentage().toFixed(1)}% down payment
                   </div>
                 </div>
                 
@@ -1693,56 +1624,8 @@ ${campusInfo.campus || 'Mikhail Education'}`;
                       )}
                     </div>
                   </div>
-                  {getDownPaymentPercentage() <= 15 && getDownPaymentPercentage() > 0 && (
-                    <span className="absolute left-2 top-1 text-gray-600 text-xs font-semibold">
-                      {getDownPaymentPercentage().toFixed(1)}%
-                    </span>
-                  )}
-                </div>
-                
-                <div className="flex justify-between text-xs text-gray-500 mt-1">
-                  <span>0%</span>
-                  <span className="text-orange-600">5%</span>
-                  <span className="text-orange-600">10%</span>
-                  <span className="text-green-600">15%</span>
-                  <span className="text-green-600">20%</span>
-                  <span className="text-green-600">25%</span>
-                  <span>100%</span>
-                </div>
-                
-                <div className="flex justify-between text-sm text-gray-600 mt-2">
-                  <span>Higher Rates</span>
-                  <span>Lower Rates</span>
                 </div>
               </div>
-              
-              <div className="bg-white border rounded-lg p-3">
-                <h4 className="text-sm font-medium text-gray-700 mb-2">Current Interest Rates</h4>
-                <div className="grid grid-cols-2 gap-2 text-xs">
-                  <div className="flex justify-between">
-                    <span>12 months:</span>
-                    <span className="font-medium text-green-600">{getInterestRate(getDownPaymentPercentage(), 12)}% APR</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>24 months:</span>
-                    <span className="font-medium text-blue-600">{getInterestRate(getDownPaymentPercentage(), 24)}% APR</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>36 months:</span>
-                    <span className="font-medium text-orange-600">{getInterestRate(getDownPaymentPercentage(), 36)}% APR</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>48 months:</span>
-                    <span className="font-medium text-red-600">{getInterestRate(getDownPaymentPercentage(), 48)}% APR</span>
-                  </div>
-                </div>
-              </div>
-              
-              {downPayment > 0 && (
-                <div className="text-center text-sm text-green-600 font-medium">
-                  💰 Your {getDownPaymentPercentage().toFixed(1)}% down payment qualifies for preferred rates!
-                </div>
-              )}
             </div>
           </div>
         </div>
@@ -1754,13 +1637,20 @@ ${campusInfo.campus || 'Mikhail Education'}`;
             <h2 className="text-lg font-semibold text-gray-800">Payment Plan Options</h2>
           </div>
           
-          {(getFinanceAmount() > 0) ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {(getFinanceAmount() > 0 && paymentPlans.length > 0) ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
               {paymentPlans.map((plan, index) => (
-                <div key={index} className={`border rounded-lg p-4 hover:shadow-md transition-shadow ${plan.interestRate === 0 ? 'border-green-300 bg-green-50' : 'border-gray-200'}`}>
+                <div key={index} className={`border rounded-lg p-4 hover:shadow-md transition-shadow ${plan.isZeroInterest ? 'border-green-400 bg-green-50' : 'border-gray-200'}`}>
+                  {plan.isZeroInterest && (
+                    <div className="text-xs font-bold text-white bg-green-500 rounded px-2 py-1 mb-2 text-center">
+                      ✨ 0% INTEREST
+                    </div>
+                  )}
                   <div className="flex justify-between items-start mb-2">
-                    <h3 className="font-semibold text-lg text-gray-800">{plan.description}</h3>
-                    <span className={`text-xs font-medium px-2 py-1 rounded ${
+                    <h3 className="font-semibold text-sm text-gray-800">{plan.description}</h3>
+                  </div>
+                  <div className="space-y-2">
+                    <div className={`text-xs font-medium px-2 py-1 rounded text-center ${
                       plan.interestRate === 0 
                         ? 'bg-green-100 text-green-800' 
                         : plan.interestRate <= 2.9
@@ -1770,39 +1660,22 @@ ${campusInfo.campus || 'Mikhail Education'}`;
                         : 'bg-red-100 text-red-800'
                     }`}>
                       {plan.interestRate}% APR
-                    </span>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="text-sm text-gray-600">
-                      Monthly Payment:
                     </div>
-                    <div className="text-xl font-bold text-blue-600">
+                    <div className="text-xl font-bold text-blue-600 text-center">
                       {formatCurrency(plan.monthlyPayment)}
                     </div>
-                    <div className="text-sm text-gray-500">
-                      Principal: {formatCurrency(plan.totalAmount - plan.totalInterest)}
+                    <div className="text-xs text-gray-500 text-center">
+                      per month
                     </div>
-                    {plan.totalInterest > 0 && (
-                      <div className="text-sm text-orange-500">
-                        Interest: {formatCurrency(plan.totalInterest)}
+                    <div className="text-xs text-gray-500 border-t pt-2">
+                      <div>Principal: {formatCurrency(plan.totalAmount - plan.totalInterest)}</div>
+                      {plan.totalInterest > 0 && (
+                        <div className="text-orange-500">Interest: {formatCurrency(plan.totalInterest)}</div>
+                      )}
+                      <div className="font-medium text-gray-700 mt-1">
+                        Total: {formatCurrency(plan.totalAmount)}
                       </div>
-                    )}
-                    <div className="text-sm font-medium text-gray-700 border-t pt-2">
-                      Total: {formatCurrency(plan.totalAmount)}
                     </div>
-                    <div className="text-sm text-gray-500">
-                      {plan.months} monthly payments
-                    </div>
-                    {downPayment > 0 && (
-                      <div className="text-xs text-green-600 font-medium">
-                        + {formatCurrency(downPayment)} down payment
-                      </div>
-                    )}
-                    {plan.interestRate === 0 && (
-                      <div className="text-xs text-green-600 font-medium bg-green-100 p-1 rounded">
-                        ✨ Interest-Free!
-                      </div>
-                    )}
                   </div>
                 </div>
               ))}
@@ -1816,7 +1689,7 @@ ${campusInfo.campus || 'Mikhail Education'}`;
                   <p className="text-sm">No monthly payments required.</p>
                 </div>
               ) : (
-                <p>Enter tuition and financial aid amounts to see payment plan options</p>
+                <p>Select a program to see payment plan options</p>
               )}
             </div>
           )}
@@ -1842,44 +1715,9 @@ ${campusInfo.campus || 'Mikhail Education'}`;
                 <div className="font-bold text-xl">{formatCurrency(getFinanceAmount())}</div>
               </div>
             </div>
-            {getFinanceAmount() > 0 && (
-              <div className="mt-4">
-                <p className="text-blue-100">
-                  Choose from {paymentPlans.length} flexible payment options with {getRateTierDescription()}
-                </p>
-                <p className="text-blue-100 text-sm">
-                  💡 Tip: Higher down payments unlock better interest rates across all terms
-                </p>
-              </div>
-            )}
-            {getFinanceAmount() === 0 && getActiveBalance() > 0 && (
-              <p className="text-blue-100 mt-4">
-                🎉 Fully paid with down payment - No financing needed!
-              </p>
-            )}
           </div>
         </div>
       </div>
-
-      {/* Print Styles */}
-      <style jsx>{`
-        @media print {
-          .bg-gray-50 {
-            background: white !important;
-          }
-          button {
-            display: none !important;
-          }
-          input, select {
-            border: none !important;
-            background: transparent !important;
-          }
-          .shadow-md {
-            box-shadow: none !important;
-            border: 1px solid #e5e7eb !important;
-          }
-        }
-      `}</style>
     </div>
   );
 };
