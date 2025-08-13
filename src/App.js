@@ -93,7 +93,16 @@ const PaymentPlanCalculator = () => {
   const calculateInterestRate = (progMonths, termMonths, downPct) => {
     if (termMonths === progMonths) return 0;
     const monthsBeyond = termMonths - progMonths;
-    let baseRate = monthsBeyond <= 12 ? 6.9 : monthsBeyond <= 24 ? 7.9 : 8.9;
+    let baseRate;
+    if (monthsBeyond <= 12) {
+      baseRate = 6.9;
+    } else if (monthsBeyond <= 24) {
+      baseRate = 7.9;
+    } else if (monthsBeyond <= 36) {
+      baseRate = 8.9;
+    } else {
+      baseRate = 9.9;  // 48+ months beyond program
+    }
     const discount = (downPct / 2) / 100;
     return Math.round(baseRate * (1 - discount) * 10) / 10;
   };
