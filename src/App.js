@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calculator, DollarSign, Calendar, FileText, User, Download } from 'lucide-react';
+import { Calculator, DollarSign, Calendar, FileText, User, Download, Lock, Unlock } from 'lucide-react';
 
 const PaymentPlanCalculator = () => {
   const [campusInfo, setCampusInfo] = useState({ campus: '', program: '' });
@@ -14,6 +14,18 @@ const PaymentPlanCalculator = () => {
   const [balance, setBalance] = useState(0);
   const [downPayment, setDownPayment] = useState(0);
   const [paymentPlans, setPaymentPlans] = useState([]);
+  
+  // Rate override system
+  const [rateOverrideEnabled, setRateOverrideEnabled] = useState(false);
+  const [passwordInput, setPasswordInput] = useState('');
+  const [manualRates, setManualRates] = useState({
+    plan1: null,
+    plan2: null,
+    plan3: null,
+    plan4: null,
+    plan5: null
+  });
+  const OVERRIDE_PASSWORD = 'mikhail2025';
 
   // Simplified database
   const programDB = {
@@ -61,7 +73,7 @@ const PaymentPlanCalculator = () => {
       { campusId: "nce", name: "Electrician (720 Clock Hours)", duration: "9 months", weeks: 39, months: 9, tuitionCost: 16584 },
       { campusId: "nce", name: "Lab Assistant, EKG Technician/Phlebotomist", duration: "9 months", weeks: 39, months: 9, tuitionCost: 14850 },
       { campusId: "nce", name: "Medical Assistant", duration: "9 months", weeks: 39, months: 9, tuitionCost: 14065 },
-      // ATI - Fixed costs here
+      // ATI
       { campusId: "ati", name: "Automotive Technology", duration: "14 months", weeks: 61, months: 14, tuitionCost: 24530 },
       { campusId: "ati", name: "HVAC/CR", duration: "10 months", weeks: 43, months: 10, tuitionCost: 17535 },
       { campusId: "ati", name: "Electrician (720 Clock Hours)", duration: "9 months", weeks: 39, months: 9, tuitionCost: 18457 },
@@ -101,10 +113,43 @@ const PaymentPlanCalculator = () => {
     } else if (monthsBeyond <= 36) {
       baseRate = 8.9;
     } else {
-      baseRate = 9.9;  // 48+ months beyond program
+      baseRate = 9.9;
     }
     const discount = (downPct / 2) / 100;
     return Math.round(baseRate * (1 - discount) * 10) / 10;
+  };
+
+  const handlePasswordSubmit = () => {
+    if (passwordInput === OVERRIDE_PASSWORD) {
+      setRateOverrideEnabled(true);
+      setPasswordInput('');
+    } else {
+      alert('Incorrect password. Please try again.');
+      setPasswordInput('');
+    }
+  };
+
+  const handleRateOverride = (planIndex, value) => {
+    const rate = value === '' || value === null ? null : parseFloat(value);
+    setManualRates(prev => ({
+      ...prev,
+      [`plan${planIndex + 1}`]: rate
+    }));
+  };
+
+  const lockOverrides = () => {
+    setRateOverrideEnabled(false);
+  };
+
+  const clearAndLockOverrides = () => {
+    setManualRates({
+      plan1: null,
+      plan2: null,
+      plan3: null,
+      plan4: null,
+      plan5: null
+    });
+    setRateOverrideEnabled(false);
   };
 
   useEffect(() => {
@@ -116,10 +161,13 @@ const PaymentPlanCalculator = () => {
     
     const terms = [program.months, program.months + 12, program.months + 24, program.months + 36, program.months + 48];
     const plans = terms.map((termMonths, index) => {
-      const rate = calculateInterestRate(program.months, termMonths, downPaymentPercentage);
+      const manualRateKey = `plan${index + 1}`;
+      const manualRate = manualRates[manualRateKey];
+      const hasManualRate = manualRate !== null && manualRate !== undefined && !isNaN(manualRate);
+      const rate = hasManualRate ? manualRate : calculateInterestRate(program.months, termMonths, downPaymentPercentage);
       const monthlyRate = rate / 100 / 12;
-      let monthlyPayment, totalAmount, totalInterest;
       
+      let monthlyPayment, totalAmount, totalInterest;
       if (rate === 0) {
         monthlyPayment = financeAmount / termMonths;
         totalAmount = financeAmount;
@@ -138,12 +186,13 @@ const PaymentPlanCalculator = () => {
         monthlyPayment: monthlyPayment,
         totalAmount: totalAmount,
         totalInterest: totalInterest,
-        isZeroInterest: rate === 0
+        isZeroInterest: rate === 0,
+        isManuallyOverridden: hasManualRate
       };
     });
     
     setPaymentPlans(plans);
-  }, [campusInfo.program, campusInfo.campus, balance, tuition, totalFinancialAid, costs, downPayment, financeAmount, downPaymentPercentage]);
+  }, [campusInfo.program, campusInfo.campus, balance, tuition, totalFinancialAid, costs, downPayment, financeAmount, downPaymentPercentage, manualRates]);
 
   const handleCampusInfoChange = (field, value) => {
     setCampusInfo(prev => {
@@ -295,51 +344,102 @@ const PaymentPlanCalculator = () => {
       </div>
 
       <div className="bg-white rounded-lg shadow-md p-6 mt-6">
-        <h2 className="text-lg font-semibold text-gray-800 mb-4">Costs & Balance</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Tuition:</label>
-            <input type="number" value={tuition} onChange={(e) => setTuition(parseFloat(e.target.value) || 0)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md" />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Balance (Override):</label>
-            <input type="number" value={balance} onChange={(e) => setBalance(parseFloat(e.target.value) || 0)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md" placeholder={calculatedBalance.toString()} />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Down Payment:</label>
-            <input type="number" value={downPayment} onChange={(e) => setDownPayment(parseFloat(e.target.value) || 0)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md" />
-          </div>
-          <div className="bg-gray-50 p-4 rounded-lg">
-            <div className="flex justify-between mb-2">
-              <span>Balance:</span>
-              <span className="font-medium">{formatCurrency(activeBalance)}</span>
-            </div>
-            <div className="flex justify-between mb-2">
-              <span>Down Payment:</span>
-              <span className="font-medium text-purple-600">-{formatCurrency(downPayment)}</span>
-            </div>
-            <div className="border-t pt-2">
-              <div className="flex justify-between font-semibold">
-                <span>To Finance:</span>
-                <span className="text-blue-600">{formatCurrency(financeAmount)}</span>
+        <h2 className="text-lg font-semibold text-gray-800 mb-4">Payment Plans</h2>
+        
+        {/* Rate Override Section */}
+        <div className="mb-6">
+          {!rateOverrideEnabled ? (
+            <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+              <div className="flex items-center gap-2 mb-3">
+                <Lock className="h-5 w-5 text-gray-600" />
+                <h3 className="text-sm font-semibold text-gray-700">Manual Rate Override (Admin Only)</h3>
+              </div>
+              <div className="flex gap-2">
+                <input 
+                  type="password"
+                  value={passwordInput}
+                  onChange={(e) => setPasswordInput(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && handlePasswordSubmit()}
+                  placeholder="Enter password to unlock"
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm"
+                />
+                <button 
+                  onClick={handlePasswordSubmit}
+                  className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 text-sm"
+                >
+                  Unlock
+                </button>
               </div>
             </div>
-          </div>
+          ) : (
+            <div className="border-2 border-green-400 rounded-lg p-4 bg-green-50">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <Unlock className="h-5 w-5 text-green-600" />
+                  <h3 className="text-sm font-semibold text-green-800">Rate Override Active</h3>
+                </div>
+                <div className="flex gap-2">
+                  <button 
+                    onClick={lockOverrides}
+                    className="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700"
+                  >
+                    Lock & Save
+                  </button>
+                  <button 
+                    onClick={clearAndLockOverrides}
+                    className="px-3 py-1 bg-red-600 text-white rounded text-sm hover:bg-red-700"
+                  >
+                    Clear All
+                  </button>
+                </div>
+              </div>
+              {paymentPlans.length > 0 && (
+                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-2">
+                  {paymentPlans.map((plan, index) => {
+                    const program = getProgramDetails(campusInfo.program, campusInfo.campus);
+                    const defaultRate = program ? calculateInterestRate(
+                      program.months,
+                      plan.months,
+                      downPaymentPercentage
+                    ) : 0;
+                    
+                    return (
+                      <div key={index} className="bg-white p-2 rounded border border-green-300">
+                        <div className="text-xs font-medium text-gray-600 mb-1">
+                          {plan.months} Month Plan
+                        </div>
+                        <div className="text-xs text-gray-500 mb-1">
+                          Default: {defaultRate}%
+                        </div>
+                        <input
+                          type="number"
+                          value={manualRates[`plan${index + 1}`] ?? ''}
+                          onChange={(e) => handleRateOverride(index, e.target.value)}
+                          placeholder="Override %"
+                          step="0.1"
+                          min="0"
+                          max="99.9"
+                          className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
         </div>
-      </div>
-
-      <div className="bg-white rounded-lg shadow-md p-6 mt-6">
-        <h2 className="text-lg font-semibold text-gray-800 mb-4">Payment Plans</h2>
+        
         {financeAmount > 0 && paymentPlans.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
             {paymentPlans.map((plan, index) => (
-              <div key={index} className={`border rounded-lg p-4 ${plan.isZeroInterest ? 'border-green-400 bg-green-50' : 'border-gray-200'}`}>
+              <div key={index} className={`border rounded-lg p-4 ${plan.isZeroInterest ? 'border-green-400 bg-green-50' : plan.isManuallyOverridden ? 'border-purple-400 bg-purple-50' : 'border-gray-200'}`}>
                 {plan.isZeroInterest && <div className="text-xs font-bold text-white bg-green-500 rounded px-2 py-1 mb-2 text-center">✨ 0% INTEREST</div>}
+                {plan.isManuallyOverridden && <div className="text-xs font-bold text-white bg-purple-500 rounded px-2 py-1 mb-2 text-center">🔧 CUSTOM RATE</div>}
                 <h3 className="font-semibold text-sm text-gray-800">{plan.description}</h3>
-                <div className="text-xs font-medium px-2 py-1 rounded text-center my-2 bg-blue-100 text-blue-800">
+                <div className={`text-xs font-medium px-2 py-1 rounded text-center my-2 ${
+                  plan.isManuallyOverridden ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'
+                }`}>
                   {plan.interestRate}% APR
                 </div>
                 <div className="text-xl font-bold text-blue-600 text-center">{formatCurrency(plan.monthlyPayment)}</div>
