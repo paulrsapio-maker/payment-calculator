@@ -344,6 +344,77 @@ const PaymentPlanCalculator = () => {
       </div>
 
       <div className="bg-white rounded-lg shadow-md p-6 mt-6">
+        <h2 className="text-lg font-semibold text-gray-800 mb-4">Costs & Balance</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Tuition:</label>
+              <input type="number" value={tuition} onChange={(e) => setTuition(parseFloat(e.target.value) || 0)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Balance (Override):</label>
+              <input type="number" value={balance} onChange={(e) => setBalance(parseFloat(e.target.value) || 0)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md" placeholder={calculatedBalance.toString()} />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Down Payment Amount:</label>
+              <div className="relative">
+                <span className="absolute left-3 top-3 text-gray-500">$</span>
+                <input 
+                  type="number" 
+                  value={downPayment} 
+                  onChange={(e) => setDownPayment(parseFloat(e.target.value) || 0)}
+                  className="w-full pl-7 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  placeholder="0.00"
+                  step="100"
+                />
+              </div>
+            </div>
+          </div>
+          
+          <div>
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="font-semibold text-gray-800 mb-3">Payment Summary</h3>
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <span>Balance:</span>
+                  <span className="font-medium">{formatCurrency(activeBalance)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Down Payment ({downPaymentPercentage.toFixed(1)}%):</span>
+                  <span className="font-medium text-purple-600">-{formatCurrency(downPayment)}</span>
+                </div>
+                <div className="border-t pt-2">
+                  <div className="flex justify-between font-semibold text-lg">
+                    <span>To Finance:</span>
+                    <span className="text-blue-600">{formatCurrency(financeAmount)}</span>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Down Payment Percentage Bar */}
+              <div className="mt-4">
+                <div className="text-xs text-gray-600 mb-1">Down Payment Progress</div>
+                <div className="w-full bg-gray-200 rounded-full h-6 overflow-hidden">
+                  <div 
+                    className="bg-gradient-to-r from-purple-500 to-purple-600 h-6 rounded-full transition-all duration-300 ease-out flex items-center justify-end pr-2"
+                    style={{ width: `${Math.min(downPaymentPercentage, 100)}%` }}
+                  >
+                    {downPaymentPercentage > 10 && (
+                      <span className="text-white text-xs font-semibold">
+                        {downPaymentPercentage.toFixed(1)}%
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-white rounded-lg shadow-md p-6 mt-6">
         <h2 className="text-lg font-semibold text-gray-800 mb-4">Payment Plans</h2>
         
         {/* Rate Override Section */}
