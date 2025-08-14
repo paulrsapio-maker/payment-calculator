@@ -11,10 +11,10 @@
     ]
   },
   "scripts": {
-  "dev": "vite",
-  "build": "vite build",
-  "start": "vite preview --port 8080",
-  "typecheck": "tsc --noEmit"
+  "start": "react-scripts start",
+  "build": "react-scripts build",
+  "test": "react-scripts test",
+  "eject": "react-scripts eject"
 },
   "dependencies": {
     "dotenv": "^17.2.1",
