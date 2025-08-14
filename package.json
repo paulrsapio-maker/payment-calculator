@@ -10,11 +10,13 @@
       "dist/server/**/*.js"
     ]
   },
+ {
   "scripts": {
-  "start": "react-scripts start",
-  "build": "react-scripts build",
-  "test": "react-scripts test",
-  "eject": "react-scripts eject"
+    "dev": "vite",
+    "build": "vite build",
+    "start": "vite preview --port 8080",
+    "typecheck": "tsc --noEmit"
+  }
 },
   "dependencies": {
     "dotenv": "^17.2.1",
